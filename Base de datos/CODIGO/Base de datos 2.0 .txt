@@ -1,0 +1,76 @@
+CREATE TABLE habitaciones (hab_numero int (4) not null,
+                           hab_tamaño varchar (10) not null,
+                           hab_capacidad int (2) not null,
+                           hab_disponibilidad boolean not null,
+                           hab_costo int (10) not null,
+                           
+                           PRIMARY KEY (hab_numero));
+
+
+CREATE TABLE empleados (emp_num_documento int (10) not null,
+                        emp_tipo_documento varchar (20) not null,
+                        emp_nombre varchar (40) not null,
+                        emp_direccion varchar (30) not null,
+                        emp_estadocivil varchar (20) not null,
+                        emp_contacto int (10) not null,
+                        emp_correo varchar (30) not null,
+                        PRIMARY KEY (emp_num_documento));
+                        
+
+create table huespedes (hue_num_documento int (10) not null,
+                        hue_tipo_documento varchar (10) not null,
+                        hue_motivo_viaje varchar (20) not null,
+                        hue_correo varchar (35) not null, 
+                        hue_sexo varchar (15) not null,
+                        hue_est_civil varchar (15) not null,
+                        hue_nombre varchar (70) not null,
+
+                        primary key (hue_num_documento));
+
+
+create TABLE pqrs (pqr_id int (10) not null,
+                   pqr_categoria varchar (15) not null,
+                   pqr_fecha date not null,
+                   pqr_estado varchar (15) not null,
+                   pqr_niv_urgencia varchar (15) not null,
+                   pqr_descripcion varchar (100) not null,
+
+                    primary key (pqr_id));
+
+
+create TABLE roles (rol_id int (5) not null,
+                    rol_descripcion varchar (20) not null,
+                    rol_emp_num_documento int (10) not null,
+                    
+                    PRIMARY KEY (rol_id),
+                    FOREIGN KEY (rol_emp_num_documento) REFERENCES empleados (emp_num_documento));
+
+Create Table reservas (res_id int (5) not null,
+			     res_estado boolean not null,
+			     res_costo int (10) not null,
+			     res_fecha date not null,
+			     res_cantidad_personas int (5) not null,
+			     res_hue_num_documento int (10) not null,
+			     res_hab_numero int (4) not null,
+
+			     Primary Key (res_id),
+			     Foreign Key (res_hue_num_documento) REFERENCES huespedes (hue_num_documento),
+			     Foreign Key (res_hab_numero) REFERENCES habitaciones (hab_numero));
+
+
+CREATE TABLE atender (ate_id int (5) not null,
+                      ate_hue_num_documento int (10) not null,
+                      ate_emp_num_documento int (10) not null,
+                      
+                      PRIMARY KEY (ate_id),
+                      FOREIGN KEY (ate_hue_num_documento) REFERENCES huespedes (hue_num_documento),
+                      FOREIGN KEY (ate_emp_num_documento) REFERENCES empleados (emp_num_documento));
+
+
+CREATE TABLE responder (res_id int (5) not null,
+                        res_emp_num_documento int (10) not null,
+                        res_pqr_id int (10) not null,
+                        
+                        PRIMARY KEY (res_id),
+                        FOREIGN KEY (res_emp_num_documento) REFERENCES empleados (emp_num_documento),
+                        FOREIGN KEY (res_pqr_id) REFERENCES pqrs (pqr_id));
